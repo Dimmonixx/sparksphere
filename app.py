@@ -199,7 +199,7 @@ APP_IDEAS = {
 def main():
     st.set_page_config(
         page_title="SparkSphere - Генератор Идей",
-        page_icon="✨",
+        page_icon="🚀",
         layout="centered"
     )
     
