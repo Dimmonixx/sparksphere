@@ -208,10 +208,29 @@ def main():
         st.session_state.saved_ideas = []
     if 'current_ideas' not in st.session_state:
         st.session_state.current_ideas = []
+    if 'daily_generations' not in st.session_state:
+        st.session_state.daily_generations = 0
+    if 'last_generation_date' not in st.session_state:
+        st.session_state.last_generation_date = ''
     
     # Title
     st.title("sparkles: SparkSphere - **Генератор Идей**")
     st.markdown("---")
+    
+    # Plan status display
+    api_key = st.session_state.get('api_key', '')
+    if api_key:
+        st.success("✨ Премиум план — безлимитно")
+    else:
+        # Reset counter daily
+        import datetime
+        today = datetime.datetime.now().strftime("%Y-%m-%d")
+        if st.session_state.last_generation_date != today:
+            st.session_state.daily_generations = 0
+            st.session_state.last_generation_date = today
+        
+        remaining = 3 - st.session_state.daily_generations
+        st.info(f"Бесплатный план: {st.session_state.daily_generations}/3 генераций использовано")
     
     # API Key Input
     api_key = st.text_input(
@@ -247,6 +266,8 @@ def main():
     if st.button("Сгенерировать 5 идей", type="primary", use_container_width=True):
         if category is None or category.strip() == "":
             st.error("Выберите категорию!")
+        elif not api_key and st.session_state.daily_generations >= 3:
+            st.error("Бесплатный лимит исчерпан! Введите API ключ для безлимитного использования")
         else:
             generate_ideas(category, complexity)
     
@@ -280,6 +301,10 @@ def main():
 def generate_ideas(category, complexity):
     """Generate 5 ideas using DeepSeek AI or fallback to preset ideas"""
     api_key = st.session_state.get('api_key', '')
+    
+    # Increment generation counter for free users
+    if not api_key:
+        st.session_state.daily_generations += 1
     
     if api_key:
         # Use DeepSeek AI
