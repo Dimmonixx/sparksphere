@@ -214,7 +214,7 @@ def main():
         st.session_state.last_generation_date = ''
     
     # Title
-    st.title("🚀: SparkSphere - **Генератор Идей**")
+    st.title("🚀 SparkSphere - **Генератор Идей**")
     st.markdown("---")
     
     # Plan status display
