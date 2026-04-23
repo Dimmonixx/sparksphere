@@ -199,8 +199,8 @@ APP_IDEAS = {
 def main():
     st.set_page_config(
         page_title="SparkSphere - Генератор Идей",
-        page_icon="sparkles:",
-        initial_sidebar_state="collapsed"
+        page_icon="✨",
+        layout="centered"
     )
     
     # Initialize session state
